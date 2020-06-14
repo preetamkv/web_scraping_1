@@ -9,7 +9,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 file_name = "FDA Enforcement URLs.xlsx"
 path = dir_path + '\\' + file_name
 
-f = open("sample.txt","w+")
+f = open("sample1.txt","w+", encoding = "utf-8")
 
 df = pd.read_excel(path, headers = 0)
 urls = df['url'].to_list()
@@ -32,17 +32,18 @@ for url in urls:
         page_soup = bs(page_html, "html.parser")
 
         # Collected all the dat in the form of a string.
-        data = page_soup.findAll("div", {"class":"middle-column"})
+        data = page_soup.findAll("div", {"class":["middle-column", "middle-column2"]})
 
         # Created a list of all the <p> tags within the data.
-        products = data[0].findAll("p")
+        products = data[0].text
+        products = products.split('PRODUCT')
 
         for product in products:
 
-            product = product.text
+            # product = product.text
 
             # For filtering only the products.
-            if 'PRODUCT ' in product and 'CODE' in product:
+            if 'CODE' in product and 'IN COMMERCE' not in product:
 
                 # Initializing the variables to store the required information.
                 ids = []
@@ -50,7 +51,7 @@ for url in urls:
                 manufacturing_firm = ""
                 
                 # To capture the IDs.
-                splits = product.split('PRODUCT')[1].split("CODE")[0]
+                splits = product.split("CODE")[0]
                 if 'Recall' in splits:
                     splits = splits.split('Recall')
                 elif 'recall' in splits:

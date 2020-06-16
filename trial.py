@@ -48,7 +48,9 @@ for url in urls:
                 # Initializing the variables to store the required information.
                 ids = []
                 recall_firm = ""
-                manufacturing_firm = ""
+                recall_location = ""
+                manufacturing_firm = "N/A"
+                manufacturing_location = "N/A"
                 
                 # To capture the IDs.
                 splits = product.split("CODE")[0]
@@ -125,9 +127,19 @@ for url in urls:
                     elif 'Firm initiated recall isongoing.' in temp1[1]:
                         manufacturing_firm = temp1[1].split('Firm initiated recall isongoing.')[0]
 
+                    manufacturing_firm = manufacturing_firm.split(',')
+                    manufacturing_location = manufacturing_firm[1:]
+                    manufacturing_location = ','.join(str(x) for x in manufacturing_location)
+                    manufacturing_firm = manufacturing_firm[0]
+                
+                recall_firm = recall_firm.split(',')
+                recall_location = recall_firm[1:]
+                recall_location = ','.join(str(x) for x in recall_location)
+                recall_firm = recall_firm[0]
+                
                 # Printing to test. Will convert it into csv in the end after making rows instead of separate variables using pandas.
-                print(ids, recall_firm, manufacturing_firm)
-                print(ids, recall_firm, manufacturing_firm, file = f)
+                print("ids: {0} recall_firm: {1} recall_location: {2} manufacturing_firm: {3} manufacturing_location: {4}".format(ids, recall_firm, recall_location, manufacturing_firm, manufacturing_location))
+                print("ids: {0} recall_firm: {1} recall_location: {2} manufacturing_firm: {3} manufacturing_location: {4}".format(ids, recall_firm, recall_location, manufacturing_firm, manufacturing_location), file = f)
 
             else:
                 pass
